@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/org/gtkmm/timetodo/" id="org.gtkmm.timetodo">
+    <key name="centisecond" type="b">
+      <default>true</default>
+      <summary>Centisecond</summary>
+      <description>Show centisecond on the timer</description>
+    </key>
+    <key name="average-life-expectancy" type="s">
+      <default>'80'</default>
+      <summary>AverageLifeExpectancy</summary>
+      <description>Average life expectancy.</description>
+    </key>
+    <key name="birthyear" type="s">
+      <default>'1900'</default>
+      <summary>BirthYear</summary>
+      <description>Year you are born</description>
+    </key>
+    <key name="birthmonth" type="s">
+      <default>'1'</default>
+      <summary>BirthMonth</summary>
+      <description>Year you are born</description>
+    </key>
+    <key name="birthday" type="s">
+      <default>'1'</default>
+      <summary>BirthDay</summary>
+      <description>Day you are born</description>
+    </key>
+  </schema>
+</schemalist>

@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# cmake compile files
+**/CMakeFiles
+build/CMakeCache.txt
+**/cmake_install.cmake
+**/Makefile
+
+**/gschemas.compiled
