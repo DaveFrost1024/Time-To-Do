@@ -31,7 +31,7 @@ TimetdAppWindow::TimetdAppWindow(BaseObjectType* cobject,
       pButton->signal_clicked().connect( sigc::mem_fun(*this, &TimetdAppWindow::pause_timer) );
     }
 
-    m_refBuilder->get_widget("time", timeLabel);
+    refBuilder->get_widget("time", timeLabel);
 
     if (!showCentiSec)
     {
@@ -39,9 +39,21 @@ TimetdAppWindow::TimetdAppWindow(BaseObjectType* cobject,
     }
 
 
-    m_refBuilder->get_widget("die_label", dieLabel);
+    // Fetching timer widgets
+    refBuilder->get_widget("minute_entry", minuteEntry);
+    refBuilder->get_widget("second_entry", secondEntry);
 
-    m_refBuilder->get_widget("mortal_label", mortalLabel);
+    refBuilder->get_widget("timer_start_button", tsButton);
+    if (tsButton)
+    {
+      tsButton->signal_clicked().connect( sigc::mem_fun(*this, &TimetdAppWindow::begin_countdown) );
+    }
+
+
+    // Fetching mortal clock widgets
+    refBuilder->get_widget("die_label", dieLabel);
+
+    refBuilder->get_widget("mortal_label", mortalLabel);
 
     set_mortality();
 
@@ -279,3 +291,64 @@ void TimetdAppWindow::pause_timer()
         paused = true;
     }
 }
+
+void TimetdAppWindow::begin_countdown()
+{
+    if (countdownStarted)
+    {
+        countdownStarted = false;
+
+        //sButton->set_label("Start");
+    }
+    else
+    {
+        countdownStarted = true;
+
+        secondEntry->set_editable(false);
+
+        std::string input = secondEntry->get_text();
+        if (input.length() > 0)
+        {
+          secondRemaining = std::stol(input);
+        }
+        else
+        {
+          return;
+        }
+
+        countdown_Start = std::chrono::high_resolution_clock::now();
+
+        // setup timeout to periodically call update_countdown()
+        sigc::slot<bool> my_slot = sigc::mem_fun(*this, &TimetdAppWindow::update_countdown);
+        sigc::connection conn = Glib::signal_timeout().connect(my_slot, 1000);
+    }
+}
+
+bool TimetdAppWindow::update_countdown()
+{
+    if (countdownPaused)
+    {
+      return true;
+    }
+    else if (!countdownStarted)
+    {
+      return false;
+    }
+
+    std::chrono::high_resolution_clock::time_point current_time = std::chrono::high_resolution_clock::now();
+
+    auto time_diff = std::chrono::duration_cast<std::chrono::seconds>(current_time - countdown_Start).count();
+    timeElapsed = time_diff;
+
+    secondEntry->set_text(std::to_string(secondRemaining - timeElapsed));
+
+    if (secondRemaining - timeElapsed < 0)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+

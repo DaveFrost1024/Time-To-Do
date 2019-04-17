@@ -36,5 +36,9 @@
 build/CMakeCache.txt
 **/cmake_install.cmake
 **/Makefile
+**/resources.c
 
 **/gschemas.compiled
+
+*.sublime-project
+*.sublime-workspace

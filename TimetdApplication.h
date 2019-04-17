@@ -27,6 +27,8 @@ private:
   void on_hide_window(Gtk::Window* window);
   void on_action_preferences();
   void on_action_quit();
+
+  bool prefDialogPresent = false;
 };
 
 #endif /* TIMETDAPPLICATION_H */

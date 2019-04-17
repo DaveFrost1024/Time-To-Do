@@ -8,6 +8,7 @@
 #include <string>
 
 #include <time.h>
+#include "TimetdApplication.h"
 
 class TimetdAppWindow : public Gtk::ApplicationWindow
 {
@@ -24,6 +25,9 @@ public:
     bool update_timer();
     void pause_timer();
 
+    void begin_countdown();
+    bool update_countdown();
+
     void on_hide_window(Gtk::Dialog* dialog = nullptr);
 
 protected:
@@ -33,6 +37,10 @@ protected:
     Gtk::Button* sButton = nullptr;
     Gtk::Button* pButton = nullptr;
     Gtk::Label* timeLabel = nullptr;
+
+    Gtk::Entry* secondEntry = nullptr;
+    Gtk::Entry* minuteEntry = nullptr;
+    Gtk::Button* tsButton = nullptr;
 
     Gtk::Label* dieLabel = nullptr;
     Gtk::Label* mortalLabel = nullptr;
@@ -45,6 +53,14 @@ private:
     long secondElapsed;
     long centisecElapsed;
 
+    // countdown variables
+    std::chrono::high_resolution_clock::time_point countdown_Start;
+    std::chrono::high_resolution_clock::time_point countdown_Pause;
+    long secondRemaining;
+    bool countdownStarted = false;
+    bool countdownPaused = false;
+
+    // mortal variables
     const long yearInSeconds = 31536000;
     const long dayInSeconds = 86400;
 

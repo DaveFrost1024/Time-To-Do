@@ -89,10 +89,17 @@ void TimetdApplication::on_activate()
 void TimetdApplication::on_hide_window(Gtk::Window* window)
 {
   delete window;
+
+  prefDialogPresent = false;
 }
 
 void TimetdApplication::on_action_preferences()
 {
+  if (prefDialogPresent)
+  {
+    return;
+  }
+
   try
   {
     auto prefs_dialog = TimetdAppPrefs::create(*get_active_window());
@@ -103,6 +110,8 @@ void TimetdApplication::on_action_preferences()
     // Delete the dialog when it is hidden.
     prefs_dialog->signal_hide().connect(sigc::bind(sigc::mem_fun(*this,
       &TimetdApplication::on_hide_window), prefs_dialog));
+
+    prefDialogPresent = true;
   }
   catch (const Glib::Error& ex)
   {
